@@ -5,6 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { authAPI } from "@/lib/api";
 
+const ROLES = [
+  { label: "Student",   value: "student",   hint: "1st - 4th year" },
+  { label: "TA",        value: "ta",         hint: "Teaching Assistant" },
+  { label: "Professor", value: "professor",  hint: "Faculty" },
+  { label: "Alumni",    value: "alumni",     hint: "Graduated" },
+];
+
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -28,10 +35,9 @@ export default function RegisterPage() {
         formData.collegeId,
         formData.email,
         formData.password,
-        formData.role
+        formData.role   // ← send role directly including "alumni"
       );
 
-      // Redirect to OTP verification page with email in URL
       router.push(`/verify-otp?email=${encodeURIComponent(formData.email)}`);
 
     } catch (err) {
@@ -50,10 +56,10 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center px-12 sm:px-24 lg:px-32 xl:px-48 bg-white border-l border-slate-100">
-        <div className="mb-10">
+      <div className="flex-1 flex flex-col justify-center px-12 sm:px-24 lg:px-32 xl:px-48 bg-white border-l border-slate-100 overflow-y-auto py-10">
+        <div className="mb-8">
           <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 mb-2">Join EduNexus.</h2>
-          <p className="text-slate-500">Use your college email (name_roll@iitp.ac.in)</p>
+          <p className="text-slate-500 text-sm">Use your college email (name_roll@iitp.ac.in)</p>
         </div>
 
         {error && (
@@ -63,25 +69,36 @@ export default function RegisterPage() {
         )}
 
         <form onSubmit={handleRegister} className="space-y-6">
-          {/* Role Selector */}
+
+          {/* Role Selector — 2x2 grid */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">Select Your Role</label>
-            <div className="flex bg-slate-100 rounded-xl p-1 gap-1">
-              {['student', 'ta', 'professor'].map((r) => (
+            <div className="grid grid-cols-2 gap-2">
+              {ROLES.map((r) => (
                 <button
-                  key={r}
+                  key={r.value}
                   type="button"
-                  onClick={() => setFormData({ ...formData, role: r })}
-                  className={`flex-1 capitalize py-2.5 text-sm rounded-lg font-medium transition-all ${
-                    formData.role === r
-                      ? 'bg-white text-indigo-700 shadow-sm'
-                      : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
+                  onClick={() => setFormData({ ...formData, role: r.value })}
+                  className={`py-3 px-4 rounded-xl text-sm font-medium transition-all text-left border ${
+                    formData.role === r.value
+                      ? "bg-indigo-600 text-white border-indigo-600 shadow-sm"
+                      : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600"
                   }`}
                 >
-                  {r === 'ta' ? 'TA' : r}
+                  <p className="font-semibold">{r.label}</p>
+                  <p className={`text-xs mt-0.5 ${formData.role === r.value ? "text-indigo-200" : "text-slate-400"}`}>
+                    {r.hint}
+                  </p>
                 </button>
               ))}
             </div>
+
+            {/* Alumni notice */}
+            {formData.role === "alumni" && (
+              <div className="mt-3 bg-amber-50 border border-amber-100 rounded-xl p-3 text-xs text-amber-700">
+                ⚠️ Use your <strong>original college ID</strong> (e.g. 2001AI54). You will get access to the Alumni Portal after login.
+              </div>
+            )}
           </div>
 
           <div>
@@ -103,7 +120,7 @@ export default function RegisterPage() {
               value={formData.collegeId}
               onChange={(e) => setFormData({ ...formData, collegeId: e.target.value })}
               className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500"
-              placeholder="e.g. 2401AI54"
+              placeholder={formData.role === "alumni" ? "e.g. 2001AI54 (your original ID)" : "e.g. 2401AI54"}
               required
             />
           </div>

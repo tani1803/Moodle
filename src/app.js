@@ -11,8 +11,8 @@ app.use(cors());
 const authRoutes = require("./routes/auth.routes");
 const courseRoutes = require("./routes/course.routes");
 const userRoutes = require("./routes/user.routes");
-
 const errorHandler = require("./utils/errorHandler");
+const placementRoutes = require("./routes/placement.routes");
 
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
@@ -20,6 +20,7 @@ app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/placement", placementRoutes);
 
 // Test route
 app.get("/", (req, res) => {
