@@ -19,7 +19,6 @@ export const authAPI = {
   register: async (name, collegeId, email, password, role) => {
     return api.post('/auth/register', { name, collegeId, email, password, role });
   },
-  // NEW — verify OTP after registration
   verifyOTP: async (email, otp) => {
     return api.post('/auth/verify-otp', { email, otp });
   }
@@ -91,6 +90,30 @@ export const placementAPI = {
   },
   toggleCommentUpvote: async (commentId) => {
     return api.put(`/placement/comments/${commentId}/upvote`);
+  }
+};
+
+export const dsaAPI = {
+  getQuestions: async () => {
+    return api.get('/placement/dsa/questions');
+  },
+  addQuestion: async (questionData) => {
+    return api.post('/placement/dsa/questions', questionData);
+  },
+  toggleCompletion: async (questionId) => {
+    return api.post(`/placement/dsa/questions/${questionId}/toggle`);
+  }
+};
+
+export const developmentAPI = {
+  getQuestions: async () => {
+    return api.get('/placement/development/questions');
+  },
+  addQuestion: async (questionData) => {
+    return api.post('/placement/development/questions', questionData);
+  },
+  toggleCompletion: async (questionId) => {
+    return api.post(`/placement/development/questions/${questionId}/toggle`);
   }
 };
 

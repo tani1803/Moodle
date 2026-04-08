@@ -41,7 +41,8 @@ const userSchema = new mongoose.Schema(
         "Mathematics and Computing",
         "AI",
         "Civil",
-        "Humanities"
+        "Humanities",
+        "Unknown"
       ]
     },
 
@@ -57,7 +58,14 @@ const userSchema = new mongoose.Schema(
     otpExpiry: {
       type: Date,          // OTP expires after 5 minutes
       default: null
-    }
+    },
+    // ── ROADMAP PROGRESS ───────────────────────────────────────
+    completedRoadmapQuestions: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RoadmapQuestion"
+      }
+    ]
   },
   { timestamps: true }
 );
