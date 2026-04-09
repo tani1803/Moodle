@@ -96,7 +96,6 @@ export const placementAPI = {
   }
 };
 
-<<<<<<< HEAD
 export const userAPI = {
   getMe: async () => {
     return api.get('/users/me');
@@ -109,7 +108,9 @@ export const userAPI = {
   },
   getTranscript: async () => {
     return api.get('/users/me/transcript');
-=======
+  }
+};
+
 export const dsaAPI = {
   getQuestions: async () => {
     return api.get('/placement/dsa/questions');
@@ -131,7 +132,27 @@ export const developmentAPI = {
   },
   toggleCompletion: async (questionId) => {
     return api.post(`/placement/development/questions/${questionId}/toggle`);
->>>>>>> b2d828765c569d74dc1e63fe0ec2b29ca6050e2d
+  }
+};
+
+export const contestAPI = {
+  getContests: async () => {
+    return api.get('/placement/contests');
+  },
+  addContest: async (contestData) => {
+    return api.post('/placement/contests', contestData);
+  }
+};
+
+export const mockOaAPI = {
+  getOAs: async () => {
+    return api.get('/placement/mock-oa');
+  },
+  addOA: async (oaData) => {
+    return api.post('/placement/mock-oa', oaData);
+  },
+  uploadResults: async (id, studentsData) => {
+    return api.put(`/placement/mock-oa/${id}/results`, studentsData);
   }
 };
 
